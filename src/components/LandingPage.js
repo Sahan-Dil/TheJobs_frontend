@@ -3,9 +3,15 @@ import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { isAuthenticated, getToken, isTokenExpired } from "../utils/Auth";
 import api from "../utils/api";
+import image1 from "../img/image1.jpg";
+import image2 from "../img/image2.jpg";
+import image3 from "../img/image3.png";
+import RandomImage from "./RandomImage";
 
 function LandingPage() {
   const [userRole, setUserRole] = useState(null);
+  const images = [image1, image2, image3];
+  const interval = 5000; // Change image every 5 seconds
 
   useEffect(() => {
     const checkUserRole = async () => {
@@ -40,6 +46,7 @@ function LandingPage() {
 
   return (
     <div>
+      <RandomImage images={images} interval={interval} />
       <h1>Welcome to My App!</h1>
       <p>This is the landing page.</p>
     </div>

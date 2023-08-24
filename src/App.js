@@ -25,7 +25,7 @@ function App() {
       <CssBaseline />
       <BrowserRouter>
         <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-        <div style={{ marginTop: "64px" }}></div>
+        {/* <div style={{ marginTop: "64px" }}></div> */}
         <Routes>
           <Route exact path={"/"} element={<LandingPage />} />
           <Route exact path={"/home"} element={<LandingPage />} />

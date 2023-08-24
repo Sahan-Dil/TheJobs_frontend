@@ -80,15 +80,27 @@ function Navbar({ darkMode, toggleDarkMode }) {
             </button>
           </>
         ) : (
-          <Link
-            to="/login"
-            style={{
-              color: darkMode ? "black" : "inherit",
-              marginRight: "16px",
-            }}
-          >
-            Login
-          </Link>
+          <>
+            <Link
+              to="/login"
+              style={{
+                color: darkMode ? "black" : "inherit",
+                marginRight: "16px",
+              }}
+            >
+              Sign In
+            </Link>
+
+            <Link
+              to="/register"
+              style={{
+                color: darkMode ? "black" : "inherit",
+                marginRight: "16px",
+              }}
+            >
+              Register
+            </Link>
+          </>
         )}
         <ToggleButton
           value="darkMode"
