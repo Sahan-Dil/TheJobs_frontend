@@ -7,7 +7,22 @@ export const setToken = (token) => localStorage.setItem("token", token);
 
 export const removeToken = () => localStorage.removeItem("token");
 
-export const isAuthenticated = () => !!getToken();
+export const isAuthenticated = (includeRole = false) => {
+  const token = getToken();
+
+  if (token) {
+    if (includeRole) {
+      const decoded = jwtDecode(token);
+      return {
+        authenticated: true,
+        role: decoded.roles,
+      };
+    }
+    return { authenticated: true };
+  }
+
+  return { authenticated: false };
+};
 
 export const isTokenExpired = (token) => {
   try {

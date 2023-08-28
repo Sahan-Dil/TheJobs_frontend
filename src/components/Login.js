@@ -15,6 +15,8 @@ import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import jwtDecode from "jwt-decode";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -35,34 +37,44 @@ function Copyright(props) {
 }
 
 export default function Login() {
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
 
     try {
-      const response = await axios.post("URL_TO_LOGIN_API", {
-        email: data.get("email"),
+      const response = await axios.post("http://localhost:8080/auth/login", {
+        username: data.get("email"),
         password: data.get("password"),
       });
-      console.log("response>>>>>>>>>", response);
-      const token = response.data.token;
-      setToken(token);
 
-      // Check user role using API calls
-      try {
-        await api.get("/user/me");
-        // Redirect to user dashboard
-      } catch (userError) {
+      const currentUser = {
+        token: response?.data?.jwt,
+        personName: response?.data?.user?.personName,
+        phone: response?.data?.user?.phone,
+        userId: response?.data?.user?.userId,
+        username: response?.data?.user?.username,
+      };
+
+      if (response.status === 200) {
+        console.log("set token obj>>>>>>>>>", JSON.stringify(currentUser));
+        setToken(JSON.stringify(currentUser));
+
         try {
-          await api.get("/admin/me");
-          // Redirect to admin dashboard
-        } catch (adminError) {
-          // Handle error, possibly show an error message
+          const decoded = jwtDecode(currentUser.token);
+          console.log("decoded", decoded.roles);
+          if (decoded.roles === "USER") {
+            navigate("/user");
+          } else if (decoded.roles === "ADMIN") {
+            navigate("/admin");
+          } else if (decoded.roles === "CONSULTANT") {
+            navigate("/consultant");
+          }
+        } catch (error) {
+          console.log(error?.message);
         }
+      } else {
+        //handle error
       }
     } catch (error) {
       // Handle error
