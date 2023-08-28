@@ -1,17 +1,21 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { isAuthenticated, removeToken } from "../utils/Auth";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { isAuthenticated, removeToken, getToken } from "../utils/Auth";
 import ToggleButton from "@mui/material/ToggleButton";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
+import jwtDecode from "jwt-decode";
 import AppBar from "@mui/material/AppBar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
 function Navbar({ darkMode, toggleDarkMode }) {
+  const { authenticated, role } = isAuthenticated(true);
+
+  const navigate = useNavigate();
   const handleLogout = () => {
     removeToken();
-    // Redirect to login page
+    navigate("/");
   };
 
   const appBarStyle = {
@@ -47,26 +51,47 @@ function Navbar({ darkMode, toggleDarkMode }) {
         >
           TheJobs
         </Typography>
-        {isAuthenticated() ? (
+        {authenticated ? (
           <>
-            <Link
-              to="/user"
-              style={{
-                color: darkMode ? "black" : "inherit",
-                marginRight: "16px",
-              }}
-            >
-              User Dashboard
-            </Link>
-            <Link
-              to="/admin"
-              style={{
-                color: darkMode ? "black" : "inherit",
-                marginRight: "16px",
-              }}
-            >
-              Admin Dashboard
-            </Link>
+            {/* user */}
+            {role === "USER" && (
+              <Link
+                to="/user"
+                style={{
+                  color: darkMode ? "black" : "inherit",
+                  marginRight: "16px",
+                }}
+              >
+                User Dashboard
+              </Link>
+            )}
+
+            {/* admin */}
+            {role === "ADMIN" && (
+              <Link
+                to="/admin"
+                style={{
+                  color: darkMode ? "black" : "inherit",
+                  marginRight: "16px",
+                }}
+              >
+                Admin Dashboard
+              </Link>
+            )}
+
+            {/* consultant */}
+            {role === "CONSULTANT" && (
+              <Link
+                to="/consultant"
+                style={{
+                  color: darkMode ? "black" : "inherit",
+                  marginRight: "16px",
+                }}
+              >
+                consultant Dashboard
+              </Link>
+            )}
+
             <button
               onClick={handleLogout}
               style={{

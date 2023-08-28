@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import UserDashboard from "./components/UserDashboard";
 import AdminDashboard from "./components/AdminDashboard";
+import ConsultantDashboard from "components/ConsultantDashboard";
 import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -33,6 +34,7 @@ function App() {
           <Route exact path="/register" element={<Register />} />
           <Route path="/user" element={<UserDashboard />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/consultant" element={<ConsultantDashboard />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

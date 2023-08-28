@@ -14,6 +14,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
+import { useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 function Copyright(props) {
@@ -35,39 +36,35 @@ function Copyright(props) {
 }
 
 export default function Register() {
+  const navigate = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      name: data.get("name"),
-      email: data.get("email"),
+      personName: data.get("name"),
+      username: data.get("email"),
       password: data.get("password"),
+      phone: data.get("phone"),
     });
 
     try {
-      const response = await axios.post("URL_TO_LOGIN_API", {
-        name: data.get("name"),
-        email: data.get("email"),
+      const response = await axios.post("http://localhost:8080/auth/register", {
+        personName: data.get("name"),
+        username: data.get("email"),
         password: data.get("password"),
+        phone: data.get("phone"),
       });
       console.log("response>>>>>>>>>", response);
-      const token = response.data.token;
-      setToken(token);
-
-      // Check user role using API calls
-      try {
-        await api.get("/user/me");
-        // Redirect to user dashboard
-      } catch (userError) {
-        try {
-          await api.get("/admin/me");
-          // Redirect to admin dashboard
-        } catch (adminError) {
-          // Handle error, possibly show an error message
-        }
+      if (response.status === 200) {
+        // Registration success, redirect to login page
+        navigate("/login");
+      } else {
+        console.log("Registration failed");
       }
     } catch (error) {
       // Handle error
+      console.error("Error during registration:", error);
     }
   };
   return (
@@ -118,10 +115,20 @@ export default function Register() {
               required
               fullWidth
               id="name"
-              label="User Name"
+              label="Full Name"
               name="name"
               autoComplete="name"
               autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="phone"
+              label="Phone Number"
+              name="phone"
+              autoComplete="tel"
+              type="tel" // Use "tel" type for better mobile keyboard layout
             />
             <TextField
               margin="normal"
@@ -131,7 +138,6 @@ export default function Register() {
               label="Email Address"
               name="email"
               autoComplete="email"
-              autoFocus
             />
             <TextField
               margin="normal"
