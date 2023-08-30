@@ -8,6 +8,7 @@ import image2 from "../img/image2.png";
 import image3 from "../img/image3.png";
 import image4 from "../img/image4.png";
 import RandomImage from "./RandomImage";
+import ConsultancyCoverpage from "./consultant/ConsultancyCoverpage";
 
 function LandingPage() {
   const [userRole, setUserRole] = useState(null);
