@@ -7,20 +7,106 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 
 export default function AddConsultancy() {
   const navigate = useNavigate();
-  const [weekdaysStart, setWeekdaysStart] = useState(8);
-  const [weekdaysEnd, setWeekdaysEnd] = useState(17);
-  const [weekendsStart, setWeekendsStart] = useState(9);
-  const [weekendsEnd, setWeekendsEnd] = useState(14);
+  const location = useLocation();
+  const receivedProps = location.state;
+  console.log("receivedProps", JSON.parse(receivedProps.availability));
+
+  const [formData, setFormData] = useState({
+    name: receivedProps.personName,
+    phone: receivedProps.phone,
+    email: receivedProps.username,
+    gender: receivedProps.gender ? receivedProps.gender : "Male",
+    country: receivedProps.country ? receivedProps.country : "",
+    description: receivedProps.description ? receivedProps.description : "",
+    weekdaysStart: receivedProps.availability
+      ? JSON.parse(receivedProps.availability).weekdaysStart
+      : 8,
+    weekdaysEnd: receivedProps.availability
+      ? JSON.parse(receivedProps.availability).weekdaysEnd
+      : 17,
+    weekendsStart: receivedProps.availability
+      ? JSON.parse(receivedProps.availability).weekendsStart
+      : 9,
+    weekendsEnd: receivedProps.availability
+      ? JSON.parse(receivedProps.availability).weekendsEnd
+      : 14,
+  });
+
+  console.log(receivedProps);
 
   const handleBack = () => {
     navigate(-1); // Go back in the stack of visited pages
   };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   const handleDone = () => {
-    // update db
+    const availabilityData = {
+      weekdaysStart: formData.weekdaysStart,
+      weekdaysEnd: formData.weekdaysEnd,
+      weekendsStart: formData.weekendsStart,
+      weekendsEnd: formData.weekendsEnd,
+    };
+    const input = {
+      name: formData.name,
+      country: formData.country,
+      gender: formData.gender,
+      description: formData.description,
+      phone: formData.phone,
+      email: formData.email,
+      availability: JSON.stringify(availabilityData),
+      userId: receivedProps.userId,
+    };
+    console.log("availability input:", input);
+
+    if (receivedProps.consultancyId) {
+      const apiUrl = `http://localhost:8080/consultant/updateConsultancy/${receivedProps.consultancyId}`;
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${receivedProps.jwtToken}`,
+      };
+
+      axios
+        .put(apiUrl, input, { headers }) // Use axios.put for updating
+        .then((response) => {
+          console.log("API Response:", response.data);
+          // Perform further actions based on the response
+        })
+        .catch((error) => {
+          console.error("API Error:", error.message);
+          // Handle the error appropriately
+        });
+    } else {
+      const apiUrl = "http://localhost:8080/consultant/createConsultancy"; //API URL
+
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${receivedProps.jwtToken}`,
+      };
+
+      axios
+        .post(apiUrl, input, { headers })
+        .then((response) => {
+          console.log("API Response:", response.data);
+          // Perform further actions based on the response
+        })
+        .catch((error) => {
+          console.error("API Error:", error.message);
+          // Handle the error appropriately
+        });
+    }
   };
 
   return (
@@ -48,6 +134,8 @@ export default function AddConsultancy() {
             fullWidth
             autoComplete="given-name"
             variant="outlined"
+            value={formData.name}
+            onChange={handleInputChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -58,6 +146,8 @@ export default function AddConsultancy() {
             label="Phone Number"
             fullWidth
             variant="outlined"
+            value={formData.phone}
+            onChange={handleInputChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -69,6 +159,8 @@ export default function AddConsultancy() {
             type="email"
             fullWidth
             variant="outlined"
+            value={formData.email}
+            onChange={handleInputChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -80,6 +172,8 @@ export default function AddConsultancy() {
             select
             fullWidth
             variant="outlined"
+            value={formData.gender}
+            onChange={handleInputChange}
             SelectProps={{
               native: true,
             }}
@@ -96,6 +190,8 @@ export default function AddConsultancy() {
             label="Country of Consulting"
             fullWidth
             variant="outlined"
+            value={formData.country}
+            onChange={handleInputChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -107,7 +203,9 @@ export default function AddConsultancy() {
             multiline
             rows={6} // Adjust the number of rows as needed
             fullWidth
-            variant="outlined" // Use outlined variant for a box-like appearance
+            variant="outlined"
+            value={formData.description}
+            onChange={handleInputChange}
           />
         </Grid>
         <Grid item xs={12}>
@@ -129,15 +227,16 @@ export default function AddConsultancy() {
                     {" "}
                     <Typography>Start Time:</Typography>
                   </Grid>
-                  <Grid item xs={3}>
+                  <Grid item xs={6} md={3}>
                     <TextField
                       type="number"
                       variant="outlined"
-                      value={weekdaysStart}
+                      name="weekdaysStart"
+                      value={formData.weekdaysStart}
                       InputProps={{
                         inputProps: { min: 0, max: 23 },
                       }}
-                      onChange={(event) => setWeekdaysStart(event.target.value)}
+                      onChange={handleInputChange}
                     />
                   </Grid>
                   <Grid item xs={3}>
@@ -151,15 +250,16 @@ export default function AddConsultancy() {
                     {" "}
                     <Typography>End Time:</Typography>
                   </Grid>
-                  <Grid item xs={3}>
+                  <Grid item xs={6} md={3}>
                     <TextField
                       type="number"
                       variant="outlined"
-                      value={weekdaysEnd}
+                      name="weekdaysEnd"
+                      value={formData.weekdaysEnd}
                       InputProps={{
                         inputProps: { min: 0, max: 23 },
                       }}
-                      onChange={(event) => setWeekdaysEnd(event.target.value)}
+                      onChange={handleInputChange}
                     />
                   </Grid>
                   <Grid item xs={3}>
@@ -185,15 +285,16 @@ export default function AddConsultancy() {
                     {" "}
                     <Typography>Start Time:</Typography>
                   </Grid>
-                  <Grid item xs={3}>
+                  <Grid item xs={6} md={3}>
                     <TextField
                       type="number"
                       variant="outlined"
-                      value={weekendsStart}
+                      name="weekendsStart"
+                      value={formData.weekendsStart}
                       InputProps={{
                         inputProps: { min: 0, max: 23 },
                       }}
-                      onChange={(event) => setWeekendsStart(event.target.value)}
+                      onChange={handleInputChange}
                     />
                   </Grid>
                   <Grid item xs={3}>
@@ -207,15 +308,16 @@ export default function AddConsultancy() {
                     {" "}
                     <Typography>End Time:</Typography>
                   </Grid>
-                  <Grid item xs={3}>
+                  <Grid item xs={6} md={3}>
                     <TextField
                       type="number"
                       variant="outlined"
-                      value={weekendsEnd}
+                      name="weekendsEnd"
+                      value={formData.weekendsEnd}
                       InputProps={{
                         inputProps: { min: 0, max: 23 },
                       }}
-                      onChange={(event) => setWeekendsEnd(event.target.value)}
+                      onChange={handleInputChange}
                     />
                   </Grid>
                   <Grid item xs={3}>

@@ -13,7 +13,6 @@ import ConsultancyCoverpage from "./consultant/ConsultancyCoverpage";
 function ConsultantDashboard() {
   return (
     <div>
-      <div style={{ margin: "64px" }}></div>
       Consultant Dashboard
       {/* <Calendar /> */}
       <ConsultancyCoverpage />
