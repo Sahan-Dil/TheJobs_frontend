@@ -13,6 +13,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { lightTheme, darkTheme } from "./theme"; // Import your themes
+import AddConsultancy from "components/consultant/AddConsultancy";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -35,6 +36,7 @@ function App() {
           <Route path="/user" element={<UserDashboard />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/consultant" element={<ConsultantDashboard />} />
+          <Route path="/consultant/consultancy" element={<AddConsultancy />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
