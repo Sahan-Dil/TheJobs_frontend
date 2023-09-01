@@ -1,5 +1,5 @@
 import axios from "axios";
-import * as React from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -15,51 +15,57 @@ import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="http://localhost:3000/">
-        TheJobs
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
-export default function UserRegForm() {
+export default function UserRegForm({ role, token }) {
   const navigate = useNavigate();
+  let apiUrl;
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      personName: data.get("name"),
-      username: data.get("email"),
-      password: data.get("password"),
-      phone: data.get("phone"),
-    });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
 
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleDone = async (event) => {
+    const input = {
+      personName: formData.name,
+      phone: formData.phone,
+      username: formData.email,
+      password: "password",
+    };
+    console.log("input:", input);
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
+    if (role === "consultant") {
+      apiUrl = "http://localhost:8080/admin/registerConsultant";
+    } else if (role === "user") {
+      apiUrl = "http://localhost:8080/auth/register";
+    }
     try {
-      const response = await axios.post("http://localhost:8080/auth/register", {
-        personName: data.get("name"),
-        username: data.get("email"),
-        password: data.get("password"),
-        phone: data.get("phone"),
+      axios
+        .post(apiUrl, input, { headers })
+        .then((response) => {
+          console.log("API Response:", response.data);
+          // Perform further actions based on the response
+        })
+        .catch((error) => {
+          console.error("API Error:", error.message);
+          // Handle the error appropriately
+        });
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
       });
-      console.log("response>>>>>>>>>", response);
-      if (response.status === 200) {
-        // Registration success, redirect to login page
-        navigate("/login");
-      } else {
-        console.log("Registration failed");
-      }
     } catch (error) {
       // Handle error
       console.error("Error during registration:", error);
@@ -73,7 +79,7 @@ export default function UserRegForm() {
         padding: "20px",
         maxWidth: "90%",
         margin: "auto",
-        marginTop: "100px",
+        // marginTop: "100px",
       }}
     >
       <Typography variant="h6" gutterBottom>
@@ -89,8 +95,8 @@ export default function UserRegForm() {
             fullWidth
             autoComplete="given-name"
             variant="outlined"
-            // value={formData.name}
-            // onChange={handleInputChange}
+            value={formData.name}
+            onChange={handleInputChange}
           />
         </Grid>
         <Grid item xs={12} md={4}>
@@ -102,8 +108,8 @@ export default function UserRegForm() {
             type="email"
             fullWidth
             variant="outlined"
-            // value={formData.email}
-            // onChange={handleInputChange}
+            value={formData.email}
+            onChange={handleInputChange}
           />
         </Grid>
         <Grid item xs={12} md={4}>
@@ -114,12 +120,12 @@ export default function UserRegForm() {
             label="Phone Number"
             fullWidth
             variant="outlined"
-            // value={formData.phone}
-            // onChange={handleInputChange}
+            value={formData.phone}
+            onChange={handleInputChange}
           />
         </Grid>
         <Grid item xs={12}>
-          <Button fullWidth variant="contained">
+          <Button onClick={handleDone} fullWidth variant="contained">
             Done
           </Button>
         </Grid>

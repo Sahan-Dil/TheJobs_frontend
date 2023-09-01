@@ -13,10 +13,11 @@ const ConsultancyCoverpage = () => {
   const navigate = useNavigate();
   let token = JSON.parse(localStorage.getItem("token")); // Retrieve the token from local storage
   let consutancyData = null;
+  console.log(token.userId);
 
   useEffect(() => {
     if (token) {
-      const apiUrl = "http://localhost:8080/consultant/getConsultancy/2"; // API endpoint
+      const apiUrl = `http://localhost:8080/consultant/getConsultancy/${token.userId}`; // API endpoint
 
       // Make the API call using Axios
       axios
@@ -30,7 +31,7 @@ const ConsultancyCoverpage = () => {
           console.log("Consultancy Data:", response.data);
         })
         .catch((error) => {
-          console.error("API Error:", error);
+          console.error("API Error: because this is first user consultancy");
           // Handle the error appropriately
         });
     }

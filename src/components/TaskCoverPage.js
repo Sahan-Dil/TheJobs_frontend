@@ -9,7 +9,7 @@ import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const TaskCoverPage = ({ imageUrl, title, description }) => {
+const TaskCoverPage = ({ imageUrl, title, description, role }) => {
   const navigate = useNavigate();
   let token = JSON.parse(localStorage.getItem("token")); // Retrieve the token from local storage
 
@@ -21,11 +21,25 @@ const TaskCoverPage = ({ imageUrl, title, description }) => {
         },
       });
     } else if (title === "Shedules") {
-      navigate("/admin", {
-        state: {
-          jwtToken: token.token,
-        },
-      });
+      if (role === "consultant") {
+        navigate("/consultant/schedules", {
+          state: {
+            jwtToken: token.token,
+          },
+        });
+      } else if (role === "admin") {
+        navigate("/admin/schedules", {
+          state: {
+            jwtToken: token.token,
+          },
+        });
+      } else if (role === "user") {
+        navigate("/user/schedules", {
+          state: {
+            jwtToken: token.token,
+          },
+        });
+      }
     }
   };
 

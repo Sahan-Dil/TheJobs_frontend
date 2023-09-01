@@ -1,5 +1,5 @@
 import React from "react";
-import TaskCoverPage from "./admin/TaskCoverPage";
+import TaskCoverPage from "./TaskCoverPage";
 
 function AdminDashboard() {
   // Define the props to pass to TaskCoverPage
@@ -24,6 +24,7 @@ function AdminDashboard() {
         imageUrl={imageUrl}
         title={title2}
         description={description2}
+        role="admin"
       />
     </div>
   );

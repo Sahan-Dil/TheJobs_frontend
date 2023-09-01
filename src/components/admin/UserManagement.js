@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 function UserManagement() {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   const [isAccordionOpen2, setIsAccordionOpen2] = useState(false);
+  let token = JSON.parse(localStorage.getItem("token"));
 
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
@@ -44,7 +45,7 @@ function UserManagement() {
             <Typography variant="h6">Job Seeker Management</Typography>
           </AccordionSummary>
           <div style={{ padding: isSmallScreen ? "16px" : "50px" }}>
-            <UserRegForm />
+            <UserRegForm role="user" token={token.token} />
             <DataGrid />
           </div>
         </Accordion>
@@ -60,10 +61,10 @@ function UserManagement() {
             aria-controls="user-management-content"
             id="user-management-header"
           >
-            <Typography variant="h6">Job Seeker Management</Typography>
+            <Typography variant="h6">Consultant Management</Typography>
           </AccordionSummary>
           <div style={{ padding: isSmallScreen ? "16px" : "50px" }}>
-            <UserRegForm />
+            <UserRegForm role="consultant" token={token.token} />
             <DataGrid />
           </div>
         </Accordion>

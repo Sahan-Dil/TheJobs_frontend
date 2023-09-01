@@ -15,6 +15,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { lightTheme, darkTheme } from "./theme"; // Import your themes
 import AddConsultancy from "components/consultant/AddConsultancy";
 import UserManagement from "components/admin/UserManagement";
+import CalendarApp from "components/Calendar";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -40,6 +41,10 @@ function App() {
 
           <Route path="/consultant" element={<ConsultantDashboard />} />
           <Route path="/consultant/consultancy" element={<AddConsultancy />} />
+
+          <Route path="/consultant/schedules" element={<CalendarApp />} />
+          <Route path="/user/schedules" element={<CalendarApp />} />
+          <Route path="/admin/schedules" element={<CalendarApp />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
