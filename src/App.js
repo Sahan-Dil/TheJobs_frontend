@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LandingPage from "./components/LandingPage";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import UserDashboard from "./components/UserDashboard";
+import UserDashboard from "./components/user/UserDashboard";
 import AdminDashboard from "./components/AdminDashboard";
 import ConsultantDashboard from "components/ConsultantDashboard";
 import Navbar from "./components/Navbar";
@@ -16,6 +16,7 @@ import { lightTheme, darkTheme } from "./theme"; // Import your themes
 import AddConsultancy from "components/consultant/AddConsultancy";
 import UserManagement from "components/admin/UserManagement";
 import CalendarApp from "components/Calendar";
+import ConsultantList from "components/user/ConsultantList";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -45,6 +46,7 @@ function App() {
           <Route path="/consultant/schedules" element={<CalendarApp />} />
           <Route path="/user/schedules" element={<CalendarApp />} />
           <Route path="/admin/schedules" element={<CalendarApp />} />
+          <Route path="/user/consultantList" element={<ConsultantList />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

@@ -9,6 +9,7 @@ import image3 from "../img/image3.png";
 import image4 from "../img/image4.png";
 import RandomImage from "./RandomImage";
 import ConsultancyCoverpage from "./consultant/ConsultancyCoverpage";
+import LandingPagePart1 from "./LandingPagePart1";
 
 function LandingPage() {
   const [userRole, setUserRole] = useState(null);
@@ -49,6 +50,7 @@ function LandingPage() {
   return (
     <div>
       <RandomImage images={images} interval={interval} />
+      <LandingPagePart1 />
       <h1>Welcome to My App!</h1>
       <p>This is the landing page.</p>
     </div>
