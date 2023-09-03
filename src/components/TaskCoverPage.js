@@ -14,14 +14,33 @@ const TaskCoverPage = ({ imageUrl, title, description, role }) => {
   const navigate = useNavigate();
   let token = JSON.parse(localStorage.getItem("token")); // Retrieve the token from local storage
   const [consultantList, setConsultantList] = useState([]);
+  const [consultantUser, setConsultantUser] = useState([]);
 
   useEffect(() => {
     loadData();
+    loadConsultantData();
   }, []);
+
+  const loadConsultantData = async () => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    const consultantApiUrl = `http://localhost:8080/auth/getConsultancy/${token.userId}`;
+
+    await axios
+      .get(consultantApiUrl)
+      .then((consultantResponse) => {
+        setConsultantUser(consultantResponse.data);
+        console.log("consultantResponse.data", consultantResponse.data);
+        console.log("consultantUser.data", consultantUser);
+      })
+      .catch((error) => {
+        console.error(
+          `Error fetching consultant data for user ${token.userId},because ${error}`
+        );
+      });
+  };
 
   const loadData = async () => {
     const apiUrl = "http://localhost:8080/auth/users";
-    const token = { token: "yourAuthToken" }; // Replace with your actual token
 
     // Step 1: Fetch the user list
     await axios
@@ -98,21 +117,29 @@ const TaskCoverPage = ({ imageUrl, title, description, role }) => {
       });
     } else if (title === "Shedules") {
       if (role === "consultant") {
-        navigate("/consultant/schedules", {
-          state: {
-            jwtToken: token.token,
-          },
-        });
+        console.log("consultantUser.........", consultantUser);
+        if (consultantUser) {
+          navigate("/consultant/schedules", {
+            state: {
+              jwtToken: token.token,
+              user: consultantUser,
+            },
+          });
+        }
       } else if (role === "admin") {
-        navigate("/admin/schedules", {
-          state: {
-            jwtToken: token.token,
-          },
-        });
+        if (consultantList[0]) {
+          console.log("consultantList", consultantList);
+          navigate("/common/consultantList", {
+            state: {
+              jwtToken: token.token,
+              userList: consultantList,
+            },
+          });
+        } else alert("something went wrong!!!");
       } else if (role === "user") {
         if (consultantList[0]) {
           console.log("consultantList", consultantList);
-          navigate("/user/consultantList", {
+          navigate("/common/consultantList", {
             state: {
               jwtToken: token.token,
               userList: consultantList,

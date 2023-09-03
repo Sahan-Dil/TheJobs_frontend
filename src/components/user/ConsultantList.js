@@ -23,7 +23,7 @@ function ConsultantList() {
   const handleClick = (user) => {
     if (token) {
       console.log(user);
-      navigate("/user/schedules", {
+      navigate("/common/schedules", {
         state: {
           jwtToken: token.token,
           user: user,

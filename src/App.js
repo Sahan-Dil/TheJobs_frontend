@@ -44,9 +44,8 @@ function App() {
           <Route path="/consultant/consultancy" element={<AddConsultancy />} />
 
           <Route path="/consultant/schedules" element={<CalendarApp />} />
-          <Route path="/user/schedules" element={<CalendarApp />} />
-          <Route path="/admin/schedules" element={<CalendarApp />} />
-          <Route path="/user/consultantList" element={<ConsultantList />} />
+          <Route path="/common/schedules" element={<CalendarApp />} />
+          <Route path="/common/consultantList" element={<ConsultantList />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
