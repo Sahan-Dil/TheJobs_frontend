@@ -1,6 +1,6 @@
 // src/components/UserDashboard.js
 import React from "react";
-import TaskCoverPage from "./TaskCoverPage";
+import TaskCoverPage from "../TaskCoverPage";
 
 function UserDashboard() {
   const description2 =

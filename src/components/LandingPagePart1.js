@@ -8,9 +8,12 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import CardHeader from "@mui/material/CardHeader";
+import WomanIcon from "@mui/icons-material/Woman";
+import Man2Icon from "@mui/icons-material/Man2";
 import ConsultantList from "./user/ConsultantList";
 
-const TaskCoverPage = ({ imageUrl, title, description, role }) => {
+const LandingPagePart1 = () => {
   const navigate = useNavigate();
   let token = JSON.parse(localStorage.getItem("token")); // Retrieve the token from local storage
   const [consultantList, setConsultantList] = useState([]);
@@ -89,94 +92,85 @@ const TaskCoverPage = ({ imageUrl, title, description, role }) => {
       });
   };
 
-  const handleGoButtonClick = () => {
-    if (title === "User Management") {
-      navigate("/admin/usermanagement", {
-        state: {
-          jwtToken: token.token,
-        },
-      });
-    } else if (title === "Shedules") {
-      if (role === "consultant") {
-        navigate("/consultant/schedules", {
-          state: {
-            jwtToken: token.token,
-          },
-        });
-      } else if (role === "admin") {
-        navigate("/admin/schedules", {
-          state: {
-            jwtToken: token.token,
-          },
-        });
-      } else if (role === "user") {
-        if (consultantList[0]) {
-          console.log("consultantList", consultantList);
-          navigate("/user/consultantList", {
-            state: {
-              jwtToken: token.token,
-              userList: consultantList,
-            },
-          });
-        } else alert("something went wrong!!!");
-      }
-    }
-  };
-
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-      }}
-    >
-      <Grid container spacing={2} justifyContent="center">
-        {/* Left side - Image */}
-        <Grid item xs={12} md={6} lg={8}>
-          <img
-            src={imageUrl} // Use the imageUrl prop here
-            alt="Consultancy Image"
-            style={{ width: "100%", height: "auto", objectFit: "cover" }}
-          />
-        </Grid>
+    <div>
+      <h1
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        Our Consultant Team
+      </h1>
 
-        {/* Right side - Card */}
-        <Grid
-          item
-          xs={12}
-          md={6}
-          lg={4}
-          sx={{ display: "flex", justifyContent: "center" }}
-        >
-          <Card sx={{ height: "auto", borderRadius: "200px", maxWidth: 345 }}>
-            <CardContent
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: "100%",
-              }}
-            >
-              <Typography gutterBottom variant="h5" component="div">
-                {title} {/* Use the title prop here */}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {description} {/* Use the description prop here */}
-              </Typography>
-              <CardActions sx={{ justifyContent: "center" }}>
-                <Button size="small" onClick={handleGoButtonClick}>
-                  GO
-                </Button>
-              </CardActions>
-            </CardContent>
-          </Card>
-        </Grid>
+      <Grid container spacing={2}>
+        {consultantList.map((user) => (
+          <Grid item key={user.userId} xs={6} sm={6} md={3}>
+            <Card sx={{ maxWidth: 345, height: 200, margin: 2 }}>
+              <CardHeader
+                title={user.personName}
+                subheader={
+                  <>
+                    <div>{user.phone}</div>
+                    <div>{user.email}</div>{" "}
+                  </>
+                }
+                titleTypographyProps={{
+                  align: "center",
+                  fontSize: "1.5rem", // Font size for screens >= sm
+                  "@media (max-width:600px)": {
+                    fontSize: "1rem", // Font size for xs screens
+                  },
+                }}
+                action={
+                  user.gender === "Female" ? (
+                    <WomanIcon fontSize="large" />
+                  ) : (
+                    <Man2Icon fontSize="large" />
+                  )
+                }
+                subheaderTypographyProps={{
+                  align: "center",
+                  fontSize: "1rem", // Font size for screens >= xs
+                }}
+                sx={{
+                  backgroundColor: (theme) =>
+                    theme.palette.mode === "light"
+                      ? theme.palette.grey[200]
+                      : theme.palette.grey[700],
+                }}
+              />
+              <CardContent>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "baseline",
+                    mb: 2,
+                  }}
+                >
+                  <Typography
+                    component="h2"
+                    variant="h3"
+                    color="text.primary"
+                    sx={{
+                      fontSize: {
+                        xs: "1.5rem", // Font size for xs screens
+                        sm: "inherit", // Font size for screens >= sm (inherit from parent)
+                      },
+                    }}
+                  >
+                    {user.country}
+                  </Typography>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
       </Grid>
-    </Box>
+    </div>
   );
 };
 
-export default TaskCoverPage;
+export default LandingPagePart1;
