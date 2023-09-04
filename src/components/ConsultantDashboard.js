@@ -10,6 +10,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import ConsultancyCoverpage from "./consultant/ConsultancyCoverpage";
 import TaskCoverPage from "./TaskCoverPage";
+import img02 from "../img/ing02.png";
 
 function ConsultantDashboard() {
   const description2 =
@@ -19,11 +20,16 @@ function ConsultantDashboard() {
 
   return (
     <div>
-      Consultant Dashboard
-      {/* <Calendar /> */}
+      <div
+        style={{
+          marginTop: "65px",
+        }}
+      >
+        {" "}
+      </div>
       <ConsultancyCoverpage />
       <TaskCoverPage
-        imageUrl={imageUrl}
+        imageUrl={img02}
         title={title2}
         description={description2}
         role="consultant"

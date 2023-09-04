@@ -8,6 +8,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import img04 from "../../img/img04.png";
 
 const ConsultancyCoverpage = () => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const ConsultancyCoverpage = () => {
     <Box
       sx={{
         flexGrow: 1,
-        height: "100vh",
+        height: "80vh",
         display: "flex",
         alignItems: "center",
       }}
@@ -68,7 +69,7 @@ const ConsultancyCoverpage = () => {
         {/* Left side - Image */}
         <Grid item xs={12} md={6} lg={8}>
           <img
-            src="https://source.unsplash.com/random?wallpapers"
+            src={img04}
             alt="Consultancy Image"
             style={{ width: "100%", height: "auto", objectFit: "cover" }}
           />

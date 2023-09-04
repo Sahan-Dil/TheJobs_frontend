@@ -166,58 +166,60 @@ const TaskCoverPage = ({ imageUrl, title, description, role }) => {
   };
 
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-      }}
-    >
-      <Grid container spacing={2} justifyContent="center">
-        {/* Left side - Image */}
-        <Grid item xs={12} md={6} lg={8}>
-          <img
-            src={imageUrl} // Use the imageUrl prop here
-            alt="Consultancy Image"
-            style={{ width: "100%", height: "auto", objectFit: "cover" }}
-          />
-        </Grid>
+    <>
+      <Box
+        sx={{
+          flexGrow: 1,
+          height: "80vh",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Grid container spacing={2} justifyContent="center">
+          {/* Left side - Image */}
+          <Grid item xs={12} md={6} lg={8}>
+            <img
+              src={imageUrl} // Use the imageUrl prop here
+              alt="Consultancy Image"
+              style={{ width: "100%", height: "auto", objectFit: "cover" }}
+            />
+          </Grid>
 
-        {/* Right side - Card */}
-        <Grid
-          item
-          xs={12}
-          md={6}
-          lg={4}
-          sx={{ display: "flex", justifyContent: "center" }}
-        >
-          <Card sx={{ height: "auto", borderRadius: "200px", maxWidth: 345 }}>
-            <CardContent
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: "100%",
-              }}
-            >
-              <Typography gutterBottom variant="h5" component="div">
-                {title} {/* Use the title prop here */}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {description} {/* Use the description prop here */}
-              </Typography>
-              <CardActions sx={{ justifyContent: "center" }}>
-                <Button size="small" onClick={handleGoButtonClick}>
-                  GO
-                </Button>
-              </CardActions>
-            </CardContent>
-          </Card>
+          {/* Right side - Card */}
+          <Grid
+            item
+            xs={12}
+            md={6}
+            lg={4}
+            sx={{ display: "flex", justifyContent: "center" }}
+          >
+            <Card sx={{ height: "auto", borderRadius: "200px", maxWidth: 345 }}>
+              <CardContent
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minHeight: "100%",
+                }}
+              >
+                <Typography gutterBottom variant="h5" component="div">
+                  {title} {/* Use the title prop here */}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {description} {/* Use the description prop here */}
+                </Typography>
+                <CardActions sx={{ justifyContent: "center" }}>
+                  <Button size="small" onClick={handleGoButtonClick}>
+                    GO
+                  </Button>
+                </CardActions>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
-      </Grid>
-    </Box>
+      </Box>
+    </>
   );
 };
 

@@ -1,6 +1,7 @@
 // src/components/UserDashboard.js
 import React from "react";
 import TaskCoverPage from "../TaskCoverPage";
+import img02 from "../../img/ing02.png";
 
 function UserDashboard() {
   const description2 =
@@ -9,9 +10,15 @@ function UserDashboard() {
   const imageUrl = "https://source.unsplash.com/random?wallpapers";
   return (
     <div>
-      User Dashboard
+      <div
+        style={{
+          marginTop: "65px",
+        }}
+      >
+        {" "}
+      </div>
       <TaskCoverPage
-        imageUrl={imageUrl}
+        imageUrl={img02}
         title={title2}
         description={description2}
         role="user"
