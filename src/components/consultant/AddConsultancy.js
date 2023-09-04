@@ -21,6 +21,7 @@ export default function AddConsultancy() {
     phone: receivedProps.phone,
     email: receivedProps.username,
     gender: receivedProps.gender ? receivedProps.gender : "Male",
+    category: receivedProps.category ? receivedProps.category : "IT",
     country: receivedProps.country ? receivedProps.country : "",
     description: receivedProps.description ? receivedProps.description : "",
     weekdaysStart: receivedProps.availability
@@ -62,6 +63,7 @@ export default function AddConsultancy() {
       name: formData.name,
       country: formData.country,
       gender: formData.gender,
+      category: formData.category,
       description: formData.description,
       phone: formData.phone,
       email: formData.email,
@@ -180,6 +182,27 @@ export default function AddConsultancy() {
           >
             <option value="male">Male</option>
             <option value="female">Female</option>
+          </TextField>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            required
+            id="category"
+            name="category"
+            label="Job Category"
+            select
+            fullWidth
+            variant="outlined"
+            value={formData.category}
+            onChange={handleInputChange}
+            SelectProps={{
+              native: true,
+            }}
+          >
+            <option value="IT">IT</option>
+            <option value="Business">Business</option>
+            <option value="Labour">Labour</option>
+            <option value="Engineering">Engineering</option>
           </TextField>
         </Grid>
         <Grid item xs={12}>

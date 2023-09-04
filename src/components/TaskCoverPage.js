@@ -17,8 +17,11 @@ const TaskCoverPage = ({ imageUrl, title, description, role }) => {
   const [consultantUser, setConsultantUser] = useState([]);
 
   useEffect(() => {
-    loadData();
-    loadConsultantData();
+    if (role === "consultant") {
+      loadConsultantData();
+    } else {
+      loadData();
+    }
   }, []);
 
   const loadConsultantData = async () => {
@@ -118,13 +121,15 @@ const TaskCoverPage = ({ imageUrl, title, description, role }) => {
     } else if (title === "Shedules") {
       if (role === "consultant") {
         console.log("consultantUser.........", consultantUser);
-        if (consultantUser) {
+        if (consultantUser.country) {
           navigate("/consultant/schedules", {
             state: {
               jwtToken: token.token,
               user: consultantUser,
             },
           });
+        } else {
+          alert("You need to set up user consultant details first...");
         }
       } else if (role === "admin") {
         if (consultantList[0]) {
@@ -147,6 +152,16 @@ const TaskCoverPage = ({ imageUrl, title, description, role }) => {
           });
         } else alert("something went wrong!!!");
       }
+    } else if (title === "Reports Dashboard") {
+      if (consultantList[0]) {
+        console.log("consultantList", consultantList);
+        navigate("/admin/reports", {
+          state: {
+            jwtToken: token.token,
+            userList: consultantList,
+          },
+        });
+      } else alert("Reports not available !!");
     }
   };
 

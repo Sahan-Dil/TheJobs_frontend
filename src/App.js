@@ -17,6 +17,8 @@ import AddConsultancy from "components/consultant/AddConsultancy";
 import UserManagement from "components/admin/UserManagement";
 import CalendarApp from "components/Calendar";
 import ConsultantList from "components/user/ConsultantList";
+import Footer from "components/footer";
+import Reports from "components/admin/Reports";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -39,6 +41,7 @@ function App() {
           <Route path="/user" element={<UserDashboard />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/usermanagement" element={<UserManagement />} />
+          <Route path="/admin/reports" element={<Reports />} />
 
           <Route path="/consultant" element={<ConsultantDashboard />} />
           <Route path="/consultant/consultancy" element={<AddConsultancy />} />
@@ -47,6 +50,7 @@ function App() {
           <Route path="/common/schedules" element={<CalendarApp />} />
           <Route path="/common/consultantList" element={<ConsultantList />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </ThemeProvider>
   );

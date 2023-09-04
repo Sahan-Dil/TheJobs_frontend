@@ -272,7 +272,11 @@ const CalendarApp = () => {
           style={{ padding: "20px", width: "300px", margin: "100px auto" }}
         >
           <Typography variant="h6">Schedule Appointment</Typography>
-          <Typography variant="subtitle1">{`Schedule an appointment for one hour on ${selectedDate.toDateString()} ${selectedTime}`}</Typography>
+          <Typography variant="subtitle1">
+            {receivedProps.userId === token.userId
+              ? `Make sure you are not available on ${selectedDate.toDateString()} ${selectedTime}`
+              : `Schedule an appointment for one hour on ${selectedDate.toDateString()} ${selectedTime}`}
+          </Typography>
           <Button
             variant="contained"
             color="primary"
