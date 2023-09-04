@@ -9,11 +9,13 @@ import {
 } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 
 const CalendarApp = () => {
   const location = useLocation();
   const receivedProps = location.state.user;
   const token = JSON.parse(localStorage.getItem("token"));
+  console.log(">>>>>>>>>>>>>>>>>>>>>>>>>", receivedProps);
 
   const data = JSON.parse(receivedProps.availability);
   const weekdaysStart = data.weekdaysStart;
@@ -29,31 +31,32 @@ const CalendarApp = () => {
 
   useEffect(() => {
     // Fetch scheduled appointments from the API and set them to the 'appointments' state
-    // Replace this with your actual API endpoint when you implement the backend
-    // For now, use dummy data
-    const dummyAppointments = [
-      {
-        userId: 52,
-        date: "Sun Sep 03 2023",
-        time: "11:00",
-        name: "John Doe",
-        consultantId: 52,
-      },
-      {
-        userId: 1,
-        date: "Sun Sep 03 2023",
-        time: "09:00",
-        name: "John Doe",
-        consultantId: 55,
-      },
-      // Add more dummy appointments as needed
-    ];
-    const filteredAppointments = dummyAppointments.filter(
-      (app) => app.date === selectedDate.toDateString()
-    );
 
-    setAppointments(filteredAppointments);
-  }, []);
+    const apiUrl = `http://localhost:8080/schedule/getByConsultant/${receivedProps.userId}`;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token.token}`,
+    };
+    try {
+      axios
+        .get(apiUrl, { headers })
+        .then((response) => {
+          const filteredAppointments = response.data.filter(
+            (app) => app.date === selectedDate.toDateString()
+          );
+
+          setAppointments(filteredAppointments);
+
+          console.log("Data retrieved successfully:", response.data);
+        })
+        .catch((error) => {
+          // Handle errors here
+          console.error("Error fetching data:", error);
+        });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }, [selectedDate]);
 
   const handlePreviousDay = () => {
     const newDate = new Date(selectedDate);
@@ -84,7 +87,7 @@ const CalendarApp = () => {
         userId: token.userId,
         date: selectedDate.toDateString(),
         time: selectedTime,
-        name: `Consultant ${token.personName} not available`,
+        userName: `Consultant ${token.personName} not available`,
         consultantId: receivedProps.userId,
       };
     } else {
@@ -92,9 +95,29 @@ const CalendarApp = () => {
         userId: token.userId,
         date: selectedDate.toDateString(),
         time: selectedTime,
-        name: token.personName,
+        userName: token.personName,
         consultantId: receivedProps.userId,
       };
+    }
+    const apiUrl = "http://localhost:8080/schedule/create";
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token.token}`,
+    };
+    try {
+      axios
+        .post(apiUrl, appointment, { headers })
+        .then((response) => {
+          console.log("API Response:", response.data);
+          setAppointments([...appointments, appointment]);
+          // Perform further actions based on the response
+        })
+        .catch((error) => {
+          console.error("API Error:", error.message);
+          // Handle the error appropriately
+        });
+    } catch (e) {
+      console.error(e);
     }
 
     // Send the payload to your backend API using axios
@@ -103,27 +126,41 @@ const CalendarApp = () => {
     console.log("Appointment Payload: ", appointment);
 
     // Update the appointments state to reflect the newly scheduled appointment
-    setAppointments([...appointments, appointment]);
 
     setIsModalOpen(false);
   };
 
   const handleDeleteAppointment = (appointment) => {
-    // Send a request to your backend API to delete the appointment
-    // Replace this with your actual API endpoint when you implement the backend
-    // Once implemented, replace the console.log with your API call
     console.log("Deleting Appointment: ", appointment);
 
-    // Remove the appointment from the state
-    const updatedAppointments = appointments.filter(
-      (app) =>
-        !(
-          app.userId === appointment.userId &&
-          app.date === appointment.date &&
-          app.time === appointment.time
-        )
-    );
-    setAppointments(updatedAppointments);
+    const apiUrl = "http://localhost:8080/schedule/delete";
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token.token}`,
+    };
+    try {
+      axios
+        .delete(apiUrl, { data: appointment, headers })
+        .then((response) => {
+          console.log("API Response:", response.data);
+          // Remove the appointment from the state
+          const updatedAppointments = appointments.filter(
+            (app) =>
+              !(
+                app.userId === appointment.userId &&
+                app.date === appointment.date &&
+                app.time === appointment.time
+              )
+          );
+          setAppointments(updatedAppointments);
+        })
+        .catch((error) => {
+          console.error("API Error:", error.message);
+          // Handle the error appropriately
+        });
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const timeSlots = [];
@@ -204,15 +241,15 @@ const CalendarApp = () => {
                 (app) =>
                   app.date === selectedDate.toDateString() &&
                   app.time === time &&
-                  app.consultantId === token.userId
+                  app.consultantId === app.userId
               )
-                ? "red"
+                ? "#FF8A80"
                 : appointments.some(
                     (app) =>
                       app.date === selectedDate.toDateString() &&
                       app.time === time
                   )
-                ? "green"
+                ? "#50C878"
                 : "gray",
             }}
           >
@@ -222,7 +259,7 @@ const CalendarApp = () => {
                 app.date === selectedDate.toDateString() &&
                 app.time === time && (
                   <Typography key={app.userId} variant="body2">
-                    {app.name}
+                    {app.userName}
                   </Typography>
                 )
             )}
