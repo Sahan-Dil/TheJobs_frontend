@@ -191,103 +191,119 @@ const CalendarApp = () => {
   }
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} container alignItems="center">
-        <IconButton onClick={handlePreviousDay}>
-          <ChevronLeft />
-        </IconButton>
-        <Typography variant="h5">{selectedDate.toDateString()}</Typography>
-        <IconButton onClick={handleNextDay}>
-          <ChevronRight />
-        </IconButton>
-      </Grid>
+    <>
+      <div
+        style={{
+          marginTop: "85px",
+        }}
+      >
+        {" "}
+      </div>
+      <div
+        style={{
+          marginBottom: "65px",
+          height: "100vh",
+        }}
+      >
+        <Grid container spacing={2}>
+          <Grid item xs={12} container alignItems="center">
+            <IconButton onClick={handlePreviousDay}>
+              <ChevronLeft />
+            </IconButton>
+            <Typography variant="h5">{selectedDate.toDateString()}</Typography>
+            <IconButton onClick={handleNextDay}>
+              <ChevronRight />
+            </IconButton>
+          </Grid>
 
-      {timeSlots.map((time) => (
-        <Grid item xs={3} key={time}>
-          <Paper
-            elevation={2}
-            onClick={() => {
-              const appointment = appointments.find(
-                (app) =>
-                  app.date === selectedDate.toDateString() &&
-                  app.time === time &&
-                  app.userId === token.userId
-              );
-              const othersAppointment = appointments.find(
-                (app) =>
-                  app.date === selectedDate.toDateString() &&
-                  app.time === time &&
-                  app.userId !== token.userId
-              );
-
-              if (appointment) {
-                const confirmDelete = window.confirm(
-                  "Do you want to delete this appointment?"
-                );
-                if (confirmDelete) {
-                  handleDeleteAppointment(appointment);
-                }
-              } else if (othersAppointment) {
-                return;
-              } else {
-                handleScheduleAppointment(time);
-              }
-            }}
-            style={{
-              cursor: "pointer",
-              padding: "10px",
-              height: "100%",
-              backgroundColor: appointments.some(
-                (app) =>
-                  app.date === selectedDate.toDateString() &&
-                  app.time === time &&
-                  app.consultantId === app.userId
-              )
-                ? "#FF8A80"
-                : appointments.some(
+          {timeSlots.map((time) => (
+            <Grid item xs={3} key={time}>
+              <Paper
+                elevation={2}
+                onClick={() => {
+                  const appointment = appointments.find(
                     (app) =>
                       app.date === selectedDate.toDateString() &&
-                      app.time === time
-                  )
-                ? "#50C878"
-                : "gray",
-            }}
-          >
-            <Typography variant="body1">{time}</Typography>
-            {appointments.map(
-              (app) =>
-                app.date === selectedDate.toDateString() &&
-                app.time === time && (
-                  <Typography key={app.userId} variant="body2">
-                    {app.userName}
-                  </Typography>
-                )
-            )}
-          </Paper>
-        </Grid>
-      ))}
+                      app.time === time &&
+                      app.userId === token.userId
+                  );
+                  const othersAppointment = appointments.find(
+                    (app) =>
+                      app.date === selectedDate.toDateString() &&
+                      app.time === time &&
+                      app.userId !== token.userId
+                  );
 
-      <Modal open={isModalOpen} onClose={handleModalClose}>
-        <Paper
-          style={{ padding: "20px", width: "300px", margin: "100px auto" }}
-        >
-          <Typography variant="h6">Schedule Appointment</Typography>
-          <Typography variant="subtitle1">
-            {receivedProps.userId === token.userId
-              ? `Make sure you are not available on ${selectedDate.toDateString()} ${selectedTime}`
-              : `Schedule an appointment for one hour on ${selectedDate.toDateString()} ${selectedTime}`}
-          </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ marginTop: "10px" }}
-            onClick={handleConfirmAppointment}
-          >
-            Confirm Appointment
-          </Button>
-        </Paper>
-      </Modal>
-    </Grid>
+                  if (appointment) {
+                    const confirmDelete = window.confirm(
+                      "Do you want to delete this appointment?"
+                    );
+                    if (confirmDelete) {
+                      handleDeleteAppointment(appointment);
+                    }
+                  } else if (othersAppointment) {
+                    return;
+                  } else {
+                    handleScheduleAppointment(time);
+                  }
+                }}
+                style={{
+                  cursor: "pointer",
+                  padding: "10px",
+                  height: "100%",
+                  backgroundColor: appointments.some(
+                    (app) =>
+                      app.date === selectedDate.toDateString() &&
+                      app.time === time &&
+                      app.consultantId === app.userId
+                  )
+                    ? "#FF8A80"
+                    : appointments.some(
+                        (app) =>
+                          app.date === selectedDate.toDateString() &&
+                          app.time === time
+                      )
+                    ? "#50C878"
+                    : "gray",
+                }}
+              >
+                <Typography variant="body1">{time}</Typography>
+                {appointments.map(
+                  (app) =>
+                    app.date === selectedDate.toDateString() &&
+                    app.time === time && (
+                      <Typography key={app.userId} variant="body2">
+                        {app.userName}
+                      </Typography>
+                    )
+                )}
+              </Paper>
+            </Grid>
+          ))}
+
+          <Modal open={isModalOpen} onClose={handleModalClose}>
+            <Paper
+              style={{ padding: "20px", width: "300px", margin: "100px auto" }}
+            >
+              <Typography variant="h6">Schedule Appointment</Typography>
+              <Typography variant="subtitle1">
+                {receivedProps.userId === token.userId
+                  ? `Make sure you are not available on ${selectedDate.toDateString()} ${selectedTime}`
+                  : `Schedule an appointment for one hour on ${selectedDate.toDateString()} ${selectedTime}`}
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ marginTop: "10px" }}
+                onClick={handleConfirmAppointment}
+              >
+                Confirm Appointment
+              </Button>
+            </Paper>
+          </Modal>
+        </Grid>
+      </div>
+    </>
   );
 };
 

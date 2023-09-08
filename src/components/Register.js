@@ -1,4 +1,6 @@
 import axios from "axios";
+import { useFormik } from "formik";
+import * as yup from "yup";
 import { setToken } from "../utils/Auth";
 import api from "../utils/api";
 import * as React from "react";
@@ -16,6 +18,19 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+const validationSchema = yup.object({
+  name: yup.string().required("Full Name is required"),
+  phone: yup.string().required("Phone Number is required"),
+  email: yup
+    .string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  password: yup
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
+});
 
 function Copyright(props) {
   return (
@@ -38,35 +53,42 @@ function Copyright(props) {
 export default function Register() {
   const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      personName: data.get("name"),
-      username: data.get("email"),
-      password: data.get("password"),
-      phone: data.get("phone"),
-    });
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      phone: "",
+      email: "",
+      password: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      // Your form submission logic goes here
+      console.log(values);
 
-    try {
-      const response = await axios.post("http://localhost:8080/auth/register", {
-        personName: data.get("name"),
-        username: data.get("email"),
-        password: data.get("password"),
-        phone: data.get("phone"),
-      });
-      console.log("response>>>>>>>>>", response);
-      if (response.status === 200) {
-        // Registration success, redirect to login page
-        navigate("/login");
-      } else {
-        console.log("Registration failed");
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/auth/register",
+          {
+            personName: values.name,
+            username: values.email,
+            password: values.password,
+            phone: values.phone,
+          }
+        );
+        console.log("response>>>>>>>>>", response);
+        if (response.status === 200) {
+          // Registration success, redirect to login page
+          navigate("/login");
+        } else {
+          console.log("Registration failed");
+        }
+      } catch (error) {
+        // Handle error
+        console.error("Error during registration:", error);
       }
-    } catch (error) {
-      // Handle error
-      console.error("Error during registration:", error);
-    }
-  };
+    },
+  });
+
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <CssBaseline />
@@ -107,7 +129,7 @@ export default function Register() {
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            onSubmit={formik.handleSubmit}
             sx={{ mt: 1 }}
           >
             <TextField
@@ -119,6 +141,10 @@ export default function Register() {
               name="name"
               autoComplete="name"
               autoFocus
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
             />
             <TextField
               margin="normal"
@@ -129,6 +155,10 @@ export default function Register() {
               name="phone"
               autoComplete="tel"
               type="tel" // Use "tel" type for better mobile keyboard layout
+              value={formik.values.phone}
+              onChange={formik.handleChange}
+              error={formik.touched.phone && Boolean(formik.errors.phone)}
+              helperText={formik.touched.phone && formik.errors.phone}
             />
             <TextField
               margin="normal"
@@ -138,6 +168,10 @@ export default function Register() {
               label="Email Address"
               name="email"
               autoComplete="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
             />
             <TextField
               margin="normal"
@@ -148,6 +182,10 @@ export default function Register() {
               type="password"
               id="password"
               autoComplete="current-password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}

@@ -4,7 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
 
-export default function DataGridDemo1() {
+export default function DataGridDemo2() {
   const [userList, setUserList] = useState([]); // Initialize userList as an empty array
 
   const apiUrl = "http://localhost:8080/auth/users";
@@ -12,7 +12,7 @@ export default function DataGridDemo1() {
   useEffect(() => {
     axios
       .get(apiUrl, {
-        params: { role: "user" },
+        params: { role: "consultant" },
       })
       .then((response) => {
         // Add a unique 'id' property to each row

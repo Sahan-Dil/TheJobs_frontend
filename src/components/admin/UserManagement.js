@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DataGrid from "./DataGrid";
 import UserRegForm from "./UserRegForm";
 import Accordion from "@mui/material/Accordion";
@@ -7,10 +7,14 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
+import axios from "axios";
+import DataGridDemo2 from "./DataGrid2";
+import DataGridDemo1 from "./DataGrid";
 
 function UserManagement() {
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   const [isAccordionOpen2, setIsAccordionOpen2] = useState(false);
+
   let token = JSON.parse(localStorage.getItem("token"));
 
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
@@ -46,7 +50,7 @@ function UserManagement() {
           </AccordionSummary>
           <div style={{ padding: isSmallScreen ? "16px" : "50px" }}>
             <UserRegForm role="user" token={token.token} />
-            <DataGrid />
+            <DataGridDemo1 />
           </div>
         </Accordion>
       </Box>
@@ -65,7 +69,7 @@ function UserManagement() {
           </AccordionSummary>
           <div style={{ padding: isSmallScreen ? "16px" : "50px" }}>
             <UserRegForm role="consultant" token={token.token} />
-            <DataGrid />
+            <DataGridDemo2 />
           </div>
         </Accordion>
       </Box>

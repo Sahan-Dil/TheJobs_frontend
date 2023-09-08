@@ -12,11 +12,11 @@ function AdminDashboard() {
   const title3 = "Reports Dashboard";
 
   const description1 =
-    "description for User Management..............................................";
+    "Add new users and consultant into system. Also We provide a list of all users and consultants.";
   const description2 =
-    "description for Shedules ...............................................";
+    "See what you got today. See all the appointments made so far...";
   const description3 =
-    "description for Reports dashboard ...............................................";
+    "View statistics on sheduled appointment and system data. We provide beautiful views of reports and analytical data";
 
   return (
     <div>

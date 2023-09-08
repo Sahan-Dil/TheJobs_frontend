@@ -62,7 +62,7 @@ function Navbar({ darkMode, toggleDarkMode }) {
                   marginRight: "16px",
                 }}
               >
-                User Dashboard
+                Pages
               </Link>
             )}
 
@@ -75,7 +75,7 @@ function Navbar({ darkMode, toggleDarkMode }) {
                   marginRight: "16px",
                 }}
               >
-                Admin Dashboard
+                Pages
               </Link>
             )}
 
@@ -88,7 +88,7 @@ function Navbar({ darkMode, toggleDarkMode }) {
                   marginRight: "16px",
                 }}
               >
-                consultant Dashboard
+                Pages
               </Link>
             )}
 

@@ -5,7 +5,7 @@ import img02 from "../../img/ing02.png";
 
 function UserDashboard() {
   const description2 =
-    "description for Shedules ...............................................";
+    "Schedule an appointment with your consultant. Ask anything to make your abroad dream true.";
   const title2 = "Shedules";
   const imageUrl = "https://source.unsplash.com/random?wallpapers";
   return (
