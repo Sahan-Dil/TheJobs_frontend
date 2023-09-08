@@ -138,6 +138,7 @@ export default function AddConsultancy() {
             variant="outlined"
             value={formData.name}
             onChange={handleInputChange}
+            disabled
           />
         </Grid>
         <Grid item xs={12}>
@@ -150,6 +151,7 @@ export default function AddConsultancy() {
             variant="outlined"
             value={formData.phone}
             onChange={handleInputChange}
+            disabled
           />
         </Grid>
         <Grid item xs={12}>
@@ -163,6 +165,7 @@ export default function AddConsultancy() {
             variant="outlined"
             value={formData.email}
             onChange={handleInputChange}
+            disabled
           />
         </Grid>
         <Grid item xs={12}>

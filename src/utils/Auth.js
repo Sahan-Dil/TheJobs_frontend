@@ -11,16 +11,22 @@ export const isAuthenticated = (includeRole = false) => {
   const token = getToken();
 
   if (token) {
-    if (includeRole) {
-      const decoded = jwtDecode(token);
-      return {
-        authenticated: true,
-        role: decoded.roles,
-      };
+    try {
+      if (includeRole) {
+        const decoded = jwtDecode(token);
+        return {
+          authenticated: true,
+          role: decoded.roles,
+        };
+      }
+      return { authenticated: true };
+    } catch (e) {
+      console.error(e);
+      localStorage.removeItem("token");
+      return { authenticated: false };
     }
-    return { authenticated: true };
   }
-
+  localStorage.removeItem("token");
   return { authenticated: false };
 };
 
