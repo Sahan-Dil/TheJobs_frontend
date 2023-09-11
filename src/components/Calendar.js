@@ -10,9 +10,11 @@ import {
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import { useAlert } from "../AlertContext";
 
 const CalendarApp = () => {
   const location = useLocation();
+  const showAlert = useAlert();
   const receivedProps = location.state.user;
   const token = JSON.parse(localStorage.getItem("token"));
   console.log(">>>>>>>>>>>>>>>>>>>>>>>>>", receivedProps);
@@ -108,15 +110,27 @@ const CalendarApp = () => {
       axios
         .post(apiUrl, appointment, { headers })
         .then((response) => {
+          showAlert({
+            msg: "Schedule Success...",
+            seviarity: "success",
+          });
           console.log("API Response:", response.data);
           setAppointments([...appointments, appointment]);
           // Perform further actions based on the response
         })
         .catch((error) => {
+          showAlert({
+            msg: "Schedule failed. Please try again.",
+            seviarity: "warning",
+          });
           console.error("API Error:", error.message);
           // Handle the error appropriately
         });
     } catch (e) {
+      showAlert({
+        msg: "An error occurred. Please try again.",
+        seviarity: "error",
+      });
       console.error(e);
     }
 
@@ -142,6 +156,10 @@ const CalendarApp = () => {
       axios
         .delete(apiUrl, { data: appointment, headers })
         .then((response) => {
+          showAlert({
+            msg: "Deleting Schedule....",
+            seviarity: "warning",
+          });
           console.log("API Response:", response.data);
           // Remove the appointment from the state
           const updatedAppointments = appointments.filter(
@@ -155,10 +173,18 @@ const CalendarApp = () => {
           setAppointments(updatedAppointments);
         })
         .catch((error) => {
+          showAlert({
+            msg: "Delete failed...",
+            seviarity: "error",
+          });
           console.error("API Error:", error.message);
           // Handle the error appropriately
         });
     } catch (e) {
+      showAlert({
+        msg: "An error occurred. Please try again.",
+        seviarity: "error",
+      });
       console.error(e);
     }
   };

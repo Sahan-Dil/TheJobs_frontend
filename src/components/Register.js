@@ -18,10 +18,14 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useAlert } from "../AlertContext";
 
 const validationSchema = yup.object({
   name: yup.string().required("Full Name is required"),
-  phone: yup.string().required("Phone Number is required"),
+  phone: yup
+    .number() // Use .number() to enforce a number value
+    .typeError("Phone Number must be a number") // Custom error message for non-number values
+    .required("Phone Number is required"),
   email: yup
     .string()
     .email("Invalid email format")
@@ -52,6 +56,7 @@ function Copyright(props) {
 
 export default function Register() {
   const navigate = useNavigate();
+  const showAlert = useAlert();
 
   const formik = useFormik({
     initialValues: {
@@ -77,13 +82,25 @@ export default function Register() {
         );
         console.log("response>>>>>>>>>", response);
         if (response.status === 200) {
+          showAlert({
+            msg: "Registration Success. Plese login with your credentials...",
+            seviarity: "success",
+          });
           // Registration success, redirect to login page
           navigate("/login");
         } else {
           console.log("Registration failed");
+          showAlert({
+            msg: "Registration failed. Please try again.",
+            seviarity: "warning",
+          });
         }
       } catch (error) {
         // Handle error
+        showAlert({
+          msg: "An error occurred. Please try again.",
+          seviarity: "error",
+        });
         console.error("Error during registration:", error);
       }
     },

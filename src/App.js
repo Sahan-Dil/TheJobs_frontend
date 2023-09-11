@@ -19,6 +19,7 @@ import CalendarApp from "components/Calendar";
 import ConsultantList from "components/user/ConsultantList";
 import Footer from "components/footer";
 import Reports from "components/admin/Reports";
+import { AlertProvider } from "AlertContext";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -30,28 +31,33 @@ function App() {
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <CssBaseline />
-      <BrowserRouter>
-        <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-        {/* <div style={{ marginTop: "64px" }}></div> */}
-        <Routes>
-          <Route exact path={"/"} element={<LandingPage />} />
-          <Route exact path={"/home"} element={<LandingPage />} />
-          <Route exact path="/login" element={<Login />} />
-          <Route exact path="/register" element={<Register />} />
-          <Route path="/user" element={<UserDashboard />} />
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/usermanagement" element={<UserManagement />} />
-          <Route path="/admin/reports" element={<Reports />} />
+      <AlertProvider>
+        <BrowserRouter>
+          <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+          {/* <div style={{ marginTop: "64px" }}></div> */}
+          <Routes>
+            <Route exact path={"/"} element={<LandingPage />} />
+            <Route exact path={"/home"} element={<LandingPage />} />
+            <Route exact path="/login" element={<Login />} />
+            <Route exact path="/register" element={<Register />} />
+            <Route path="/user" element={<UserDashboard />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/usermanagement" element={<UserManagement />} />
+            <Route path="/admin/reports" element={<Reports />} />
 
-          <Route path="/consultant" element={<ConsultantDashboard />} />
-          <Route path="/consultant/consultancy" element={<AddConsultancy />} />
+            <Route path="/consultant" element={<ConsultantDashboard />} />
+            <Route
+              path="/consultant/consultancy"
+              element={<AddConsultancy />}
+            />
 
-          <Route path="/consultant/schedules" element={<CalendarApp />} />
-          <Route path="/common/schedules" element={<CalendarApp />} />
-          <Route path="/common/consultantList" element={<ConsultantList />} />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
+            <Route path="/consultant/schedules" element={<CalendarApp />} />
+            <Route path="/common/schedules" element={<CalendarApp />} />
+            <Route path="/common/consultantList" element={<ConsultantList />} />
+          </Routes>
+          <Footer />
+        </BrowserRouter>
+      </AlertProvider>
     </ThemeProvider>
   );
 }

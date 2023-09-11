@@ -17,6 +17,7 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import jwtDecode from "jwt-decode";
 import { Navigate, useNavigate } from "react-router-dom";
+import { useAlert } from "../AlertContext";
 
 function Copyright(props) {
   return (
@@ -37,6 +38,7 @@ function Copyright(props) {
 }
 
 export default function Login() {
+  const showAlert = useAlert();
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -61,6 +63,31 @@ export default function Login() {
         setToken(JSON.stringify(currentUser));
 
         try {
+          showAlert({
+            msg: "Loging Success. We are happy to see you...",
+            seviarity: "success",
+          });
+
+          const headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${currentUser.token}`,
+          };
+
+          fetch("http://localhost:8080/common/getwelcomemsg", {
+            headers: headers, // Include headers in the request
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data.message);
+              showAlert({
+                msg: data.message,
+                seviarity: "info",
+              });
+            })
+            .catch((error) => {
+              console.error("Error fetching message:", error);
+            });
+
           const decoded = jwtDecode(currentUser.token);
           console.log("decoded", decoded.roles);
           if (decoded.roles === "USER") {
@@ -71,12 +98,24 @@ export default function Login() {
             navigate("/consultant");
           }
         } catch (error) {
+          showAlert({
+            msg: "Loging failed. Please try again.",
+            seviarity: "warning",
+          });
           console.log(error?.message);
         }
       } else {
+        showAlert({
+          msg: "An error occurred. Please try again.",
+          seviarity: "error",
+        });
         //handle error
       }
     } catch (error) {
+      showAlert({
+        msg: "An error occurred. Please try again.",
+        seviarity: "error",
+      });
       // Handle error
     }
   };

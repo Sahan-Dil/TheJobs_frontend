@@ -9,8 +9,10 @@ import axios from "axios";
 import emailjs from "@emailjs/browser";
 import { useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
+import { useAlert } from "../../AlertContext";
 
 export default function UserRegForm({ role, token }) {
+  const showAlert = useAlert();
   const navigate = useNavigate();
   const emailForm = useRef();
   let apiUrl;
@@ -60,29 +62,41 @@ export default function UserRegForm({ role, token }) {
       try {
         const response = await axios.post(apiUrl, input, { headers });
         console.log("API Response:", response.data);
+        showAlert({
+          msg: "New user is creating...",
+          seviarity: "success",
+        });
+        if (response.status === 200) {
+          emailjs
+            .sendForm(
+              "service_vd2ls7b",
+              "template_55fax15",
+              emailForm.current,
+              "BsMEAINPLaChPqWdq"
+            )
+            .then(
+              (result) => {
+                console.log(result.text);
+              },
+              (error) => {
+                console.log(error.text);
+              }
+            );
 
-        // Perform further actions based on the response
-        emailjs
-          .sendForm(
-            "service_vd2ls7b",
-            "template_55fax15",
-            emailForm.current,
-            "BsMEAINPLaChPqWdq"
-          )
-          .then(
-            (result) => {
-              console.log(result.text);
-            },
-            (error) => {
-              console.log(error.text);
-            }
-          );
-        window.location.reload();
-
-        // Reset the form after successful submission
-        formik.resetForm();
+          // Reset the form after successful submission
+          formik.resetForm();
+        } else {
+          showAlert({
+            msg: "User creation failed. Please try again.",
+            seviarity: "warning",
+          });
+        }
       } catch (error) {
         console.error("API Error:", error.message);
+        showAlert({
+          msg: "An error occurred. Please try again.",
+          seviarity: "error",
+        });
         // Handle the error appropriately
       }
     },
