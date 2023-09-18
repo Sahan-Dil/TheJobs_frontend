@@ -8,12 +8,18 @@ import jwtDecode from "jwt-decode";
 import AppBar from "@mui/material/AppBar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { useAlert } from "../AlertContext";
 
 function Navbar({ darkMode, toggleDarkMode }) {
   const { authenticated, role } = isAuthenticated(true);
+  const showAlert = useAlert();
 
   const navigate = useNavigate();
   const handleLogout = () => {
+    showAlert({
+      msg: "Loging Out. Please wait...",
+      seviarity: "warning",
+    });
     removeToken();
     navigate("/");
   };

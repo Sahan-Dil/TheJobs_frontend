@@ -9,8 +9,11 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import { useAlert } from "../../AlertContext";
 
 export default function AddConsultancy() {
+  const showAlert = useAlert();
+
   const navigate = useNavigate();
   const location = useLocation();
   const receivedProps = location.state;
@@ -83,10 +86,19 @@ export default function AddConsultancy() {
       axios
         .put(apiUrl, input, { headers }) // Use axios.put for updating
         .then((response) => {
+          showAlert({
+            msg: "Updated consultant details successfully...",
+            seviarity: "success",
+          });
           console.log("API Response:", response.data);
+
           // Perform further actions based on the response
         })
         .catch((error) => {
+          showAlert({
+            msg: "update failed. Please try again.",
+            seviarity: "warning",
+          });
           console.error("API Error:", error.message);
           // Handle the error appropriately
         });
@@ -101,10 +113,18 @@ export default function AddConsultancy() {
       axios
         .post(apiUrl, input, { headers })
         .then((response) => {
+          showAlert({
+            msg: "Updated consultant details successfully...",
+            seviarity: "success",
+          });
           console.log("API Response:", response.data);
           // Perform further actions based on the response
         })
         .catch((error) => {
+          showAlert({
+            msg: "update failed. Please try again.",
+            seviarity: "warning",
+          });
           console.error("API Error:", error.message);
           // Handle the error appropriately
         });

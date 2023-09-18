@@ -3,6 +3,8 @@ import TaskCoverPage from "./TaskCoverPage";
 import img01 from "../img/img01.png";
 import img02 from "../img/ing02.png";
 import img03 from "../img/img03.png";
+import WelcomeMsg from "./admin/welcomeMsg";
+import Paper from "@mui/material/Paper";
 
 function AdminDashboard() {
   // Define the props to pass to TaskCoverPage
@@ -44,6 +46,17 @@ function AdminDashboard() {
         description={description3}
         role="admin"
       />
+      <Paper
+        elevation={3}
+        style={{
+          padding: "20px",
+          maxWidth: "90%",
+          margin: "auto",
+          marginBottom: "20px",
+        }}
+      >
+        <WelcomeMsg msg={"hi"} />
+      </Paper>
     </div>
   );
 }
